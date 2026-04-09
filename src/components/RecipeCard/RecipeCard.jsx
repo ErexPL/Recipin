@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Heart, Clock, ChefHat, Bookmark, Share2, Flame } from 'lucide-react';
-import { useRecipes } from '../context/RecipeContext';
+import { useRecipes } from "../../context/RecipeContext";
 import './RecipeCard.css';
 
 const RecipeCard = ({ recipe }) => {

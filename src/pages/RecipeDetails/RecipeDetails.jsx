@@ -1,7 +1,7 @@
 import React from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { useRecipes } from '../context/RecipeContext';
-import { useAuth } from '../context/AuthContext';
+import { useRecipes } from '../../context/RecipeContext';
+import { useAuth } from '../../context/AuthContext';
 import { ArrowLeft, Clock, ChefHat, Heart, Bookmark, Flame, ListOrdered, ShoppingBag } from 'lucide-react';
 import './RecipeDetails.css';
 

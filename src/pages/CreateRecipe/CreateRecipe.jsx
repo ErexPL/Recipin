@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Camera, Plus, Trash2, ChefHat, Type, Clock } from 'lucide-react';
-import { useRecipes } from '../context/RecipeContext';
+import { useRecipes } from '../../context/RecipeContext';
 import './CreateRecipe.css';
 
 const CreateRecipe = () => {
@@ -43,7 +43,6 @@ const CreateRecipe = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
 
-
         const cleanedIngredients = ingredients.filter(i => i.trim() !== '');
         const cleanedSteps = steps.filter(s => s.trim() !== '');
 
@@ -77,7 +76,6 @@ const CreateRecipe = () => {
 
             <form className="create-form glass-panel" onSubmit={handleSubmit}>
 
-                {/* Basic Info Section */}
                 <div className="form-section">
                     <h2 className="section-title">The Basics</h2>
 
@@ -149,7 +147,6 @@ const CreateRecipe = () => {
                     </div>
                 </div>
 
-                {/* Ingredients Section */}
                 <div className="form-section">
                     <h2 className="section-title">Ingredients</h2>
                     {ingredients.map((ingredient, index) => (
@@ -182,7 +179,6 @@ const CreateRecipe = () => {
                     </button>
                 </div>
 
-                {/* Steps Section */}
                 <div className="form-section">
                     <h2 className="section-title">Instructions</h2>
                     {steps.map((step, index) => (

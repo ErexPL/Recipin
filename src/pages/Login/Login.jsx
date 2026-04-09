@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { ChefHat, UserPlus, Lock, User } from 'lucide-react';
-import { useAuth } from '../context/AuthContext';
+import { ChefHat, LogIn, Lock, User } from 'lucide-react';
+import { useAuth } from '../../context/AuthContext';
 import './Auth.css';
 
-const Register = () => {
-    const [formData, setFormData] = useState({ username: '', password: '', confirmPassword: '' });
+const Login = () => {
+    const [formData, setFormData] = useState({ username: '', password: '' });
     const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
 
@@ -19,27 +19,19 @@ const Register = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError('');
-
-        if (formData.password !== formData.confirmPassword) {
-            return setError('Passwords do not match');
-        }
-
         setIsLoading(true);
 
-        const response = await fetch('/api/auth/register', {
+        const response = await fetch('/api/auth/login', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                username: formData.username,
-                password: formData.password
-            }),
+            body: JSON.stringify(formData),
         });
 
         const data = await response.json();
         setIsLoading(false);
 
         if (!response.ok) {
-            setError(data.error || 'Registration failed');
+            setError(data.error || 'Login failed');
             return;
         }
 
@@ -54,8 +46,8 @@ const Register = () => {
                     <div className="empty-icon glass-card mx-auto mb-4">
                         <ChefHat size={40} color="var(--color-primary)" />
                     </div>
-                    <h1 className="page-title">Join Recipin</h1>
-                    <p className="page-subtitle">Create an account to save and share recipes</p>
+                    <h1 className="page-title">Welcome Back</h1>
+                    <p className="page-subtitle">Login to access your recipes</p>
                 </div>
 
                 {error && <div className="auth-error">{error}</div>}
@@ -69,7 +61,7 @@ const Register = () => {
                             type="text"
                             name="username"
                             className="input-field"
-                            placeholder="Choose a username"
+                            placeholder="Enter your username"
                             value={formData.username}
                             onChange={handleChange}
                             required
@@ -84,39 +76,24 @@ const Register = () => {
                             type="password"
                             name="password"
                             className="input-field"
-                            placeholder="Create a strong password"
+                            placeholder="Enter your password"
                             value={formData.password}
                             onChange={handleChange}
                             required
                         />
                     </div>
 
-                    <div className="input-group">
-                        <label className="input-label flex-center-start gap-2">
-                            <Lock size={16} /> Confirm Password
-                        </label>
-                        <input
-                            type="password"
-                            name="confirmPassword"
-                            className="input-field"
-                            placeholder="Confirm your password"
-                            value={formData.confirmPassword}
-                            onChange={handleChange}
-                            required
-                        />
-                    </div>
-
                     <button type="submit" className="btn btn-primary auth-btn mt-4" disabled={isLoading}>
-                        {isLoading ? 'Creating account...' : <><UserPlus size={20} /> Sign Up</>}
+                        {isLoading ? 'Logging in...' : <><LogIn size={20} /> Login</>}
                     </button>
                 </form>
 
                 <p className="auth-footer text-center mt-6">
-                    Already have an account? <Link to="/login" className="auth-link">Log in</Link>
+                    Don't have an account? <Link to="/register" className="auth-link">Sign up</Link>
                 </p>
             </div>
         </div>
     );
 };
 
-export default Register;
+export default Login;
