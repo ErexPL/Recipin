@@ -10,14 +10,15 @@ const RecipeCard = ({ recipe }) => {
   const handleShare = async (e) => {
     e.preventDefault();
     e.stopPropagation();
+    const shareUrl = `${window.location.origin}/recipe/${recipe.id}`;
     if (navigator.share) {
       await navigator.share({
         title: recipe.title,
         text: `Check out this ${recipe.title} recipe on Recipin!`,
-        url: window.location.href,
+        url: shareUrl,
       });
     } else {
-      await navigator.clipboard.writeText(`Check out ${recipe.title}!`);
+      await navigator.clipboard.writeText(shareUrl);
       alert('Recipe link copied to clipboard!');
     }
   };
