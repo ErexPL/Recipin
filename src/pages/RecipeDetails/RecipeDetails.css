@@ -4,11 +4,44 @@
     padding-bottom: 4rem;
 }
 
+.detail-top-bar {
+    margin-bottom: 1rem;
+}
+
 .back-btn {
-    margin-bottom: 1.5rem;
     background: var(--color-surface);
     backdrop-filter: blur(12px);
     border: 1px solid var(--color-border);
+}
+
+.owner-actions {
+    gap: 0.75rem;
+}
+
+.danger-btn {
+    background-color: transparent;
+    color: var(--color-text-secondary);
+    border: 1px dashed var(--color-border);
+}
+
+.danger-btn:hover {
+    color: #ff4757;
+    border-color: #ff4757;
+    background: rgba(255, 71, 87, 0.1);
+}
+
+.edit-header {
+    align-items: center;
+}
+
+.edit-header .page-title {
+    font-size: 1.75rem;
+}
+
+.detail-actions .upvote-btn.active {
+    color: #ff4757;
+    background: rgba(255, 71, 87, 0.1);
+    border-color: rgba(255, 71, 87, 0.2);
 }
 
 .back-btn:hover {

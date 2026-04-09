@@ -73,35 +73,24 @@
     background-color: var(--color-surface);
 }
 
-.pill-btn {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-    padding: 0.5rem 1.25rem;
-    border-radius: var(--radius-full);
-    font-weight: 500;
-    color: var(--color-text-secondary);
-    transition: all var(--transition-fast);
+.pill-btn.active {
+    background-color: var(--color-primary);
+    color: white;
+    box-shadow: 0 4px 12px rgba(255, 107, 107, 0.3);
 }
 
-.pill-btn:hover {
-    color: var(--color-text-primary);
-    background-color: var(--color-surface-hover);
+[data-theme='dark'] .pill-btn.active {
+    background-color: var(--color-primary);
+    color: white;
 }
 
 [data-theme='dark'] .pill-btn {
-    color: var(--color-text-secondary);
+    color: var(--color-text-muted);
 }
 
 [data-theme='dark'] .pill-btn:hover {
     color: var(--color-text-primary);
     background-color: var(--color-surface-hover);
-}
-
-.pill-btn.active {
-    background-color: var(--color-primary);
-    color: white;
-    box-shadow: 0 4px 12px rgba(255, 107, 107, 0.3);
 }
 
 .recipe-grid {

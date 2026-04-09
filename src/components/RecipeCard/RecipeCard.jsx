@@ -63,10 +63,10 @@ const RecipeCard = ({ recipe }) => {
 
         <div className="recipe-footer flex-between">
           <button
-            className="upvote-btn flex-center"
+            className={`upvote-btn flex-center ${recipe.hasUpvoted ? 'active' : ''}`}
             onClick={() => toggleUpvote(recipe.id)}
           >
-            <Heart size={18} className="upvote-icon" />
+            <Heart size={18} className={`upvote-icon ${recipe.hasUpvoted ? 'icon-filled' : ''}`} />
             <span className="upvote-count">{recipe.upvotes}</span>
           </button>
 

@@ -170,8 +170,21 @@
     transform: scale(1.1);
 }
 
+.upvote-btn.active {
+    color: var(--color-primary);
+    background: var(--color-primary-light);
+}
+
+.upvote-btn.active .upvote-icon {
+    fill: var(--color-primary);
+}
+
 .upvote-icon {
     transition: transform var(--transition-bounce);
+}
+
+.upvote-icon.icon-filled {
+    fill: var(--color-primary);
 }
 
 .share-btn {

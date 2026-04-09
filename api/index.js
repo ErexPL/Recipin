@@ -138,4 +138,45 @@ app.post('/api/recipes/:id/upvote', authenticateToken, async (req, res) => {
     }
 });
 
+app.put('/api/recipes/:id', authenticateToken, async (req, res) => {
+    const recipeId = req.params.id;
+    const userId = req.user.id;
+    const { title, image, prepTime, difficulty, ingredients, steps } = req.body;
+
+    const check = await pool.query('SELECT * FROM recipes WHERE id = $1', [recipeId]);
+    if (check.rows.length === 0) {
+        return res.status(404).json({ error: 'Recipe not found' });
+    }
+    if (check.rows[0].author_id !== userId) {
+        return res.status(403).json({ error: 'Not authorized to edit this recipe' });
+    }
+
+    const result = await pool.query(
+        `UPDATE recipes SET title = $1, image = $2, preptime = $3, difficulty = $4, ingredients = $5, steps = $6 
+         WHERE id = $7 RETURNING *`,
+        [title, image, prepTime, difficulty, JSON.stringify(ingredients), JSON.stringify(steps), recipeId]
+    );
+
+    res.json({ message: 'Recipe updated successfully', recipe: result.rows[0] });
+});
+
+app.delete('/api/recipes/:id', authenticateToken, async (req, res) => {
+    const recipeId = req.params.id;
+    const userId = req.user.id;
+
+    const check = await pool.query('SELECT * FROM recipes WHERE id = $1', [recipeId]);
+    if (check.rows.length === 0) {
+        return res.status(404).json({ error: 'Recipe not found' });
+    }
+    if (check.rows[0].author_id !== userId) {
+        return res.status(403).json({ error: 'Not authorized to delete this recipe' });
+    }
+
+    await pool.query('DELETE FROM saves WHERE recipe_id = $1', [recipeId]);
+    await pool.query('DELETE FROM upvotes WHERE recipe_id = $1', [recipeId]);
+    await pool.query('DELETE FROM recipes WHERE id = $1', [recipeId]);
+
+    res.json({ message: 'Recipe deleted successfully' });
+});
+
 export default app;

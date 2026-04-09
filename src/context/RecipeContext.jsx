@@ -92,6 +92,42 @@ export const RecipeProvider = ({ children }) => {
         }
     };
 
+    const updateRecipe = async (id, updatedRecipe) => {
+        const res = await fetch(`/api/recipes/${id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify(updatedRecipe)
+        });
+
+        if (res.ok) {
+            await fetchRecipes();
+            return true;
+        } else {
+            const errData = await res.json();
+            alert(errData.error || 'Failed to update recipe');
+            return false;
+        }
+    };
+
+    const deleteRecipe = async (id) => {
+        const res = await fetch(`/api/recipes/${id}`, {
+            method: 'DELETE',
+            headers: { 'Authorization': `Bearer ${token}` }
+        });
+
+        if (res.ok) {
+            setRecipes(prev => prev.filter(r => r.id !== id));
+            return true;
+        } else {
+            const errData = await res.json();
+            alert(errData.error || 'Failed to delete recipe');
+            return false;
+        }
+    };
+
     let filteredRecipes = recipes.filter(recipe =>
         recipe.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
         recipe.ingredients.some(ing => ing.toLowerCase().includes(searchQuery.toLowerCase()))
@@ -113,6 +149,8 @@ export const RecipeProvider = ({ children }) => {
         toggleSave,
         toggleUpvote,
         addRecipe,
+        updateRecipe,
+        deleteRecipe,
         isLoading
     };
 
