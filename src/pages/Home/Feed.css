@@ -73,6 +73,19 @@
     background-color: var(--color-surface);
 }
 
+.pill-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0.5rem 1rem;
+    font-weight: 500;
+    border-radius: var(--radius-full);
+    transition: all var(--transition-fast);
+    color: var(--color-text-secondary);
+    font-size: 0.875rem;
+}
+
 .pill-btn.active {
     background-color: var(--color-primary);
     color: white;
