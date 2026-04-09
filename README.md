@@ -46,5 +46,3 @@ Make sure you have Node.js and npm installed on your machine.
     ```
 
 ---
-
-Just remember to replace `https://github.com/your_username/recipin.git` with the actual URL of your repository.# Recipin: Your Digital Cookbook
