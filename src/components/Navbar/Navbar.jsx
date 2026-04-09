@@ -1,13 +1,15 @@
-import React from 'react';
-import { ChefHat, Search, PlusCircle, Bookmark, Compass, LogOut, User } from 'lucide-react';
+import React, { useContext } from 'react';
+import { ChefHat, Search, PlusCircle, Bookmark, Compass, LogOut, User, Sun, Moon } from 'lucide-react';
 import { NavLink, Link, useLocation, useNavigate } from 'react-router-dom';
 import { useRecipes } from '../../context/RecipeContext';
 import { useAuth } from '../../context/AuthContext';
+import { ThemeContext } from '../../context/ThemeContext';
 import './Navbar.css';
 
 const Navbar = () => {
     const { searchQuery, setSearchQuery } = useRecipes();
     const { user, logout, isAuthenticated } = useAuth();
+    const { theme, toggleTheme } = useContext(ThemeContext);
     const location = useLocation();
     const navigate = useNavigate();
     const isSearchPage = location.pathname === '/';
@@ -74,6 +76,9 @@ const Navbar = () => {
                             </NavLink>
                         </div>
                     )}
+                     <button onClick={toggleTheme} className="btn-icon" style={{ marginLeft: '1rem' }}>
+                        {theme === 'light' ? <Moon size={20} /> : <Sun size={20} />}
+                    </button>
                 </div>
             </div>
         </nav>
