@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useRecipes } from '../../context/RecipeContext';
 import { useAuth } from '../../context/AuthContext';
-import { ArrowLeft, Clock, ChefHat, Heart, Bookmark, Flame, ListOrdered, ShoppingBag, Pencil, Trash2, X, Plus } from 'lucide-react';
+import { ArrowLeft, Clock, Heart, Bookmark, Flame, ListOrdered, ShoppingBag, Pencil, Trash2, X, Plus, Upload, Camera } from 'lucide-react';
 import './RecipeDetails.css';
 
 const RecipeDetails = () => {
@@ -14,6 +14,8 @@ const RecipeDetails = () => {
     const [editForm, setEditForm] = useState(null);
     const [ingredients, setIngredients] = useState([]);
     const [steps, setSteps] = useState([]);
+    const [imagePreview, setImagePreview] = useState('');
+    const fileInputRef = useRef(null);
 
     if (isLoading) {
         return (
@@ -58,16 +60,44 @@ const RecipeDetails = () => {
         });
         setIngredients([...recipe.ingredients]);
         setSteps([...recipe.steps]);
+        setImagePreview(recipe.image);
         setIsEditing(true);
     };
 
     const cancelEditing = () => {
         setIsEditing(false);
         setEditForm(null);
+        setImagePreview('');
     };
 
     const handleEditChange = (e) => {
-        setEditForm({ ...editForm, [e.target.name]: e.target.value });
+        const { name, value } = e.target;
+        if (name === 'prepTime') {
+            const numericValue = value.replace(/[^0-9]/g, '');
+            setEditForm({ ...editForm, [name]: numericValue });
+        } else {
+            setEditForm({ ...editForm, [name]: value });
+        }
+    };
+
+    const handleImageUpload = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setEditForm(prev => ({ ...prev, image: reader.result }));
+                setImagePreview(reader.result);
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
+    const removeImage = () => {
+        setEditForm(prev => ({ ...prev, image: '' }));
+        setImagePreview('');
+        if (fileInputRef.current) {
+            fileInputRef.current.value = '';
+        }
     };
 
     const handleIngredientChange = (index, value) => {
@@ -149,21 +179,37 @@ const RecipeDetails = () => {
                         </div>
 
                         <div className="input-group">
-                            <label className="input-label">Image URL</label>
+                            <label className="input-label">Photo</label>
+                            {!imagePreview ? (
+                                <div className="upload-area" onClick={() => fileInputRef.current?.click()}>
+                                    <Upload size={32} className="upload-icon" />
+                                    <p>Click to upload a photo</p>
+                                    <span className="upload-hint">PNG, JPG, or WEBP</span>
+                                </div>
+                            ) : (
+                                <div className="image-preview mt-2">
+                                    <img src={imagePreview} alt="Preview" />
+                                    <button type="button" className="remove-image-btn" onClick={removeImage}>
+                                        <X size={20} />
+                                    </button>
+                                </div>
+                            )}
                             <input
-                                type="url"
-                                name="image"
-                                className="input-field"
-                                value={editForm.image}
-                                onChange={handleEditChange}
+                                ref={fileInputRef}
+                                type="file"
+                                accept="image/*"
+                                onChange={handleImageUpload}
+                                style={{ display: 'none' }}
                             />
                         </div>
 
                         <div className="grid-2-col">
                             <div className="input-group">
-                                <label className="input-label">Total Time</label>
+                                <label className="input-label">Time (minutes)</label>
                                 <input
                                     type="text"
+                                    inputMode="numeric"
+                                    pattern="[0-9]*"
                                     name="prepTime"
                                     className="input-field"
                                     value={editForm.prepTime}

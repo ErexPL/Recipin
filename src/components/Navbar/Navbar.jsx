@@ -56,13 +56,13 @@ const Navbar = () => {
                                 <PlusCircle size={20} />
                                 <span>Create</span>
                             </NavLink>
-                            <div className="nav-item user-menu flex-center-start gap-2 ml-4">
-                                <div className="flex-center gap-2" style={{ color: 'var(--color-text-primary)' }}>
+                            <div className="user-section">
+                                <span className="user-name">
                                     <User size={18} />
-                                    <span className="nav-label" style={{ display: 'inline', fontSize: '0.875rem' }}>{user.username}</span>
-                                </div>
-                                <button onClick={handleLogout} className="btn-icon danger-icon" title="Logout" style={{ width: '2rem', height: '2rem' }}>
-                                    <LogOut size={16} />
+                                    {user.username}
+                                </span>
+                                <button onClick={handleLogout} className="btn-icon logout-btn" title="Logout">
+                                    <LogOut size={18} />
                                 </button>
                             </div>
                         </>

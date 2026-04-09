@@ -55,10 +55,6 @@ const RecipeCard = ({ recipe }) => {
             <Clock size={16} />
             <span>{recipe.prepTime} min</span>
           </div>
-          <div className="stat">
-            <ChefHat size={16} />
-            <span>{recipe.difficulty}</span>
-          </div>
         </div>
 
         <div className="recipe-footer flex-between">

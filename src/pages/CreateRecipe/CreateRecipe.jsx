@@ -1,27 +1,53 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Camera, Plus, Trash2, ChefHat, Type, Clock } from 'lucide-react';
+import { Camera, Plus, Trash2, ChefHat, Type, Clock, Upload, X } from 'lucide-react';
 import { useRecipes } from '../../context/RecipeContext';
 import './CreateRecipe.css';
 
 const CreateRecipe = () => {
     const { addRecipe } = useRecipes();
     const navigate = useNavigate();
+    const fileInputRef = useRef(null);
 
     const [formData, setFormData] = useState({
         title: '',
         prepTime: '',
-        cookTime: '',
         difficulty: 'Easy',
         image: '',
     });
 
+    const [imagePreview, setImagePreview] = useState('');
     const [ingredients, setIngredients] = useState(['']);
     const [steps, setSteps] = useState(['']);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setFormData(prev => ({ ...prev, [name]: value }));
+        if (name === 'prepTime') {
+            const numericValue = value.replace(/[^0-9]/g, '');
+            setFormData(prev => ({ ...prev, [name]: numericValue }));
+        } else {
+            setFormData(prev => ({ ...prev, [name]: value }));
+        }
+    };
+
+    const handleImageUpload = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setFormData(prev => ({ ...prev, image: reader.result }));
+                setImagePreview(reader.result);
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
+    const removeImage = () => {
+        setFormData(prev => ({ ...prev, image: '' }));
+        setImagePreview('');
+        if (fileInputRef.current) {
+            fileInputRef.current.value = '';
+        }
     };
 
     const handleArrayChange = (index, value, setter, list) => {
@@ -53,7 +79,6 @@ const CreateRecipe = () => {
 
         const newRecipe = {
             ...formData,
-
             image: formData.image || 'https://images.unsplash.com/photo-1495521821757-a1efb6729352?auto=format&fit=crop&q=80&w=800',
             ingredients: cleanedIngredients,
             steps: cleanedSteps,
@@ -96,33 +121,43 @@ const CreateRecipe = () => {
 
                     <div className="input-group">
                         <label className="input-label flex-center-start gap-2">
-                            <Camera size={16} /> Image URL
+                            <Camera size={16} /> Photo
                         </label>
-                        <input
-                            type="url"
-                            name="image"
-                            className="input-field"
-                            placeholder="https://example.com/image.jpg"
-                            value={formData.image}
-                            onChange={handleChange}
-                        />
-                        {formData.image && (
+                        {!imagePreview ? (
+                            <div className="upload-area" onClick={() => fileInputRef.current?.click()}>
+                                <Upload size={32} className="upload-icon" />
+                                <p>Click to upload a photo</p>
+                                <span className="upload-hint">PNG, JPG, or WEBP</span>
+                            </div>
+                        ) : (
                             <div className="image-preview mt-2">
-                                <img src={formData.image} alt="Preview" onError={(e) => e.target.style.display = 'none'} />
+                                <img src={imagePreview} alt="Preview" />
+                                <button type="button" className="remove-image-btn" onClick={removeImage}>
+                                    <X size={20} />
+                                </button>
                             </div>
                         )}
+                        <input
+                            ref={fileInputRef}
+                            type="file"
+                            accept="image/*"
+                            onChange={handleImageUpload}
+                            style={{ display: 'none' }}
+                        />
                     </div>
 
                     <div className="grid-2-col">
                         <div className="input-group">
                             <label className="input-label flex-center-start gap-2">
-                                <Clock size={16} /> Total Time
+                                <Clock size={16} /> Time (minutes)
                             </label>
                             <input
                                 type="text"
+                                inputMode="numeric"
+                                pattern="[0-9]*"
                                 name="prepTime"
                                 className="input-field"
-                                placeholder="e.g., 45 min"
+                                placeholder="e.g., 45"
                                 value={formData.prepTime}
                                 onChange={handleChange}
                                 required
