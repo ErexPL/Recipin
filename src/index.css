@@ -257,3 +257,11 @@ img, picture, video, canvas, svg {
 .input-field::placeholder {
   color: var(--color-text-muted);
 }
+
+.text-lg {
+  font-size: 1.125rem;
+}
+
+.font-bold {
+  font-weight: 700;
+}

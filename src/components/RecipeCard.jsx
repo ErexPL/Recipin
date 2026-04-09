@@ -47,7 +47,7 @@ const RecipeCard = ({ recipe }) => {
           <Link to={`/recipe/${recipe.id}`} style={{ textDecoration: 'none', color: 'inherit' }}>
             <h3 className="recipe-title">{recipe.title}</h3>
           </Link>
-          <p className="recipe-author">by {recipe.author}</p>
+          <p className="recipe-author">by {recipe.author_name}</p>
         </div>
 
         <div className="recipe-stats">

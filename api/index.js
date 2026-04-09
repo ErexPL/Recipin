@@ -53,7 +53,7 @@ app.post('/api/auth/login', async (req, res) => {
 
     if (!user) return res.status(400).json({ error: 'Invalid username or password' });
 
-    const validPassword = await bcrypt.compare(password, user.passwordhash);
+    const validPassword = await bcrypt.compare(password, user.passwordHash);
     if (!validPassword) return res.status(400).json({ error: 'Invalid username or password' });
 
     const token = jwt.sign({ id: user.id, username: user.username }, JWT_SECRET, { expiresIn: '7d' });
@@ -82,7 +82,6 @@ app.get('/api/recipes', async (req, res) => {
 
     const formattedRecipes = result.rows.map(r => ({
         ...r,
-        perptime: r.preptime,
         ingredients: JSON.parse(r.ingredients || '[]'),
         steps: JSON.parse(r.steps || '[]'),
         isSaved: !!r.issaved,
