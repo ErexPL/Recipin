@@ -214,6 +214,8 @@ const CreateRecipe = () => {
                     </button>
                 </div>
 
+                <div className="section-divider"></div>
+
                 <div className="form-section">
                     <h2 className="section-title">Instructions</h2>
                     {steps.map((step, index) => (

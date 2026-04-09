@@ -13,7 +13,13 @@
 }
 
 .form-section {
-    margin-bottom: 3rem;
+    margin-bottom: 2.5rem;
+}
+
+.section-divider {
+    height: 1px;
+    background: linear-gradient(to right, transparent, var(--color-border), transparent);
+    margin: 2rem 0 2.5rem;
 }
 
 .grid-2-col {
@@ -105,6 +111,7 @@
 
 .array-input-row {
     align-items: center;
+    padding: 0.75rem 0;
 }
 
 .flex-start {

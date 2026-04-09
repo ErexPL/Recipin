@@ -21,9 +21,15 @@
 }
 
 .danger-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
     background-color: transparent;
     color: var(--color-text-secondary);
     border: 1px dashed var(--color-border);
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius-full);
+    font-weight: 500;
 }
 
 .danger-btn:hover {
@@ -128,13 +134,15 @@
     width: auto;
     padding: 0 1.2rem;
     border-radius: var(--radius-full);
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    color: var(--color-text-secondary);
 }
 
 .detail-actions .upvote-btn:hover,
 .detail-actions .upvote-btn.active {
-    color: #ff4757;
-    background: rgba(255, 71, 87, 0.1);
-    border-color: rgba(255, 71, 87, 0.2);
+    color: var(--color-primary);
+    background: var(--color-primary-light);
 }
 
 .detail-grid {
