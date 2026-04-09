@@ -49,6 +49,11 @@
     box-shadow: var(--shadow-sm);
 }
 
+[data-theme='dark'] .badge {
+    background: rgba(30, 41, 59, 0.9);
+    color: var(--color-text-primary);
+}
+
 .badge-difficulty {
     color: var(--color-primary);
 }
@@ -69,6 +74,10 @@
     box-shadow: var(--shadow-sm);
     transition: all var(--transition-bounce);
     z-index: 2;
+}
+
+[data-theme='dark'] .action-btn {
+    background: rgba(30, 41, 59, 0.9);
 }
 
 .action-btn:hover {
@@ -140,7 +149,7 @@
     transition: all var(--transition-fast);
     padding: 0.375rem 0.75rem;
     border-radius: var(--radius-full);
-    background: rgba(0, 0, 0, 0.03);
+    background: var(--color-surface);
 }
 
 .upvote-btn:hover {

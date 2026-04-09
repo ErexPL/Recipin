@@ -57,7 +57,7 @@ const RecipeDetails = () => {
                             <Flame size={16} /> {recipe.difficulty}
                         </span>
                         <span className="badge badge-time">
-                            <Clock size={16} /> {recipe.prepTime}
+                            <Clock size={16} /> {recipe.prepTime} min
                         </span>
                     </div>
                 </div>

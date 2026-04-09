@@ -53,7 +53,7 @@ const RecipeCard = ({ recipe }) => {
         <div className="recipe-stats">
           <div className="stat">
             <Clock size={16} />
-            <span>{recipe.prepTime}</span>
+            <span>{recipe.prepTime} min</span>
           </div>
           <div className="stat">
             <ChefHat size={16} />
