@@ -55,8 +55,13 @@
     background-color: var(--color-surface);
     font-family: var(--font-sans);
     font-size: 1rem;
+    color: var(--color-text-primary);
     transition: all var(--transition-fast);
     box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.02);
+}
+
+.search-input::placeholder {
+    color: var(--color-text-muted);
 }
 
 .search-input:focus {
@@ -64,6 +69,7 @@
     border-color: var(--color-primary);
     box-shadow: 0 0 0 3px var(--color-primary-light);
     background-color: var(--color-surface);
+    color: var(--color-text-primary);
 }
 
 .nav-links {

@@ -26,25 +26,39 @@ const Register = () => {
 
         setIsLoading(true);
 
-        const response = await fetch('/api/auth/register', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                username: formData.username,
-                password: formData.password
-            }),
-        });
+        try {
+            const response = await fetch('/api/auth/register', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    username: formData.username,
+                    password: formData.password
+                }),
+            });
 
-        const data = await response.json();
-        setIsLoading(false);
+            const text = await response.text();
+            let data;
+            try {
+                data = JSON.parse(text);
+            } catch {
+                setError('Server error. Please try again later.');
+                setIsLoading(false);
+                return;
+            }
 
-        if (!response.ok) {
-            setError(data.error || 'Registration failed');
-            return;
+            setIsLoading(false);
+
+            if (!response.ok) {
+                setError(data.error || 'Registration failed');
+                return;
+            }
+
+            login(data.user, data.token);
+            navigate('/');
+        } catch (err) {
+            setIsLoading(false);
+            setError('Network error. Please check your connection.');
         }
-
-        login(data.user, data.token);
-        navigate('/');
     };
 
     return (
