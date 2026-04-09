@@ -21,22 +21,36 @@ const Login = () => {
         setError('');
         setIsLoading(true);
 
-        const response = await fetch('/api/auth/login', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(formData),
-        });
+        try {
+            const response = await fetch('/api/auth/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(formData),
+            });
 
-        const data = await response.json();
-        setIsLoading(false);
+            const text = await response.text();
+            let data;
+            try {
+                data = JSON.parse(text);
+            } catch {
+                setError('Server error. Please try again later.');
+                setIsLoading(false);
+                return;
+            }
 
-        if (!response.ok) {
-            setError(data.error || 'Login failed');
-            return;
+            setIsLoading(false);
+
+            if (!response.ok) {
+                setError(data.error || 'Login failed');
+                return;
+            }
+
+            login(data.user, data.token);
+            navigate('/');
+        } catch (err) {
+            setIsLoading(false);
+            setError('Network error. Please check your connection.');
         }
-
-        login(data.user, data.token);
-        navigate('/');
     };
 
     return (
