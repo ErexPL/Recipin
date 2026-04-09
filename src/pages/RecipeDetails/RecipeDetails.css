@@ -20,6 +20,24 @@
     gap: 0.75rem;
 }
 
+.owner-actions .btn-outline {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: var(--color-surface);
+    border: 1px solid var(--color-border);
+    color: var(--color-text-secondary);
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius-full);
+    font-weight: 500;
+}
+
+.owner-actions .btn-outline:hover {
+    color: var(--color-primary);
+    border-color: var(--color-primary);
+    background: var(--color-primary-light);
+}
+
 .danger-btn {
     display: inline-flex;
     align-items: center;
@@ -30,6 +48,7 @@
     padding: 0.5rem 1rem;
     border-radius: var(--radius-full);
     font-weight: 500;
+    box-shadow: none;
 }
 
 .danger-btn:hover {
