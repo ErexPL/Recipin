@@ -44,5 +44,3 @@ Make sure you have Node.js and npm installed on your machine.
     ```sh
     npm run dev
     ```
-
----
