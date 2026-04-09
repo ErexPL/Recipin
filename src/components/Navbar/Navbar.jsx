@@ -1,8 +1,8 @@
 import React from 'react';
 import { ChefHat, Search, PlusCircle, Bookmark, Compass, LogOut, User } from 'lucide-react';
 import { NavLink, Link, useLocation, useNavigate } from 'react-router-dom';
-import { useRecipes } from '../context/RecipeContext';
-import { useAuth } from '../context/AuthContext';
+import { useRecipes } from '../../context/RecipeContext';
+import { useAuth } from '../../context/AuthContext';
 import './Navbar.css';
 
 const Navbar = () => {

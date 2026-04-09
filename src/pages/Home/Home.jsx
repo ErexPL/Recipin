@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
-import RecipeCard from '../components/RecipeCard';
-import { useRecipes } from '../context/RecipeContext';
+import RecipeCard from '../../components/RecipeCard/RecipeCard';
+import { useRecipes } from "../../context/RecipeContext";
 import { Sparkles, UtensilsCrossed } from 'lucide-react';
 import './Feed.css';
 

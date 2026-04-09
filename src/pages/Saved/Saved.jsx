@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
-import RecipeCard from '../components/RecipeCard';
-import { useRecipes } from '../context/RecipeContext';
+import RecipeCard from '../../components/RecipeCard/RecipeCard';
+import { useRecipes } from '../../context/RecipeContext';
 import { Bookmark, ChefHat } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import './Feed.css';
+import '../Home/Feed.css';
 
 const Saved = () => {
     const { recipes, setFilter } = useRecipes();
