@@ -140,10 +140,27 @@ img, picture, video, canvas, svg {
   box-shadow: 0 12px 24px 0 rgba(31, 38, 135, 0.1);
 }
 
+[data-theme='dark'] .glass-card {
+  background: rgba(30, 41, 59, 0.6);
+  border: 1px solid rgba(51, 65, 85, 0.4);
+}
+
 .container {
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 1.5rem;
+}
+
+.main-content {
+  padding: 2rem 1.5rem;
+  min-height: calc(100vh - 80px);
+}
+
+@media (max-width: 768px) {
+  .main-content {
+    padding: 1.5rem 1rem;
+    min-height: calc(100vh - 70px);
+  }
 }
 
 .flex-center {
@@ -256,6 +273,15 @@ img, picture, video, canvas, svg {
   color: var(--color-primary);
   transform: scale(1.1);
   box-shadow: var(--shadow-md);
+}
+
+[data-theme='dark'] .btn-icon {
+  background-color: var(--color-surface);
+  color: var(--color-text-secondary);
+}
+
+[data-theme='dark'] .btn-icon:hover {
+  background-color: var(--color-surface-hover);
 }
 
 .input-group {

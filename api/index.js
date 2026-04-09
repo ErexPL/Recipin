@@ -82,6 +82,7 @@ app.get('/api/recipes', async (req, res) => {
 
     const formattedRecipes = result.rows.map(r => ({
         ...r,
+        prepTime: r.preptime,
         ingredients: JSON.parse(r.ingredients || '[]'),
         steps: JSON.parse(r.steps || '[]'),
         isSaved: !!r.issaved,
