@@ -30,6 +30,8 @@
     padding: 0.5rem 1rem;
     border-radius: var(--radius-full);
     font-weight: 500;
+    box-shadow: none;
+    transition: all var(--transition-normal);
 }
 
 .owner-actions .btn-outline:hover {
@@ -37,10 +39,7 @@
     border-color: var(--color-primary);
     background: var(--color-primary-light);
     transform: translateY(-2px);
-}
-
-.owner-actions .btn-outline:hover svg {
-    stroke: var(--color-primary);
+    box-shadow: 0 4px 12px rgba(255, 107, 107, 0.2);
 }
 
 .danger-btn {
@@ -53,6 +52,8 @@
     padding: 0.5rem 1rem;
     border-radius: var(--radius-full);
     font-weight: 500;
+    box-shadow: none;
+    transition: all var(--transition-normal);
 }
 
 .danger-btn:hover {
@@ -60,6 +61,7 @@
     border-color: #ff4757;
     background: rgba(255, 71, 87, 0.1);
     transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(255, 71, 87, 0.2);
 }
 
 .edit-header {
