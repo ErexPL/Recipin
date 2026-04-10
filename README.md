@@ -34,7 +34,7 @@ Make sure you have Node.js and npm installed on your machine.
 
 1.  Clone the repo
     ```sh
-    git clone https://github.com/your_username/recipin.git
+    git clone https://github.com/ErexPL/recipin.git
     ```
 2.  Install NPM packages
     ```sh
