@@ -58,16 +58,11 @@ export const RecipeProvider = ({ children }) => {
         const data = await res.json();
         if (res.ok) {
             setRecipes(prev =>
-                prev.map(r => {
-                    if (r.id === id) {
-                        return {
-                            ...r,
-                            hasUpvoted: data.hasUpvoted,
-                            upvotes: data.hasUpvoted ? r.upvotes + 1 : r.upvotes - 1
-                        };
-                    }
-                    return r;
-                })
+                prev.map(r => r.id === id ? {
+                    ...r,
+                    hasUpvoted: data.hasUpvoted,
+                    upvotes: data.hasUpvoted ? r.upvotes + 1 : r.upvotes - 1
+                } : r)
             );
         }
     };
@@ -141,7 +136,6 @@ export const RecipeProvider = ({ children }) => {
 
     const value = {
         recipes: filteredRecipes,
-        allRecipesCount: recipes.length,
         searchQuery,
         setSearchQuery,
         filter,

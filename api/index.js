@@ -16,10 +16,10 @@ const authenticateToken = (req, res, next) => {
     const authHeader = req.headers['authorization'];
     const token = authHeader && authHeader.split(' ')[1];
 
-    if (!token) return res.status(401).json({ error: 'Access denied. No token provided.' });
+    if (!token) return res.status(401).json({ error: 'Access denied' });
 
     jwt.verify(token, JWT_SECRET, (err, user) => {
-        if (err) return res.status(403).json({ error: 'Invalid token.' });
+        if (err) return res.status(403).json({ error: 'Invalid token' });
         req.user = user;
         next();
     });
@@ -29,21 +29,20 @@ app.post('/api/auth/register', async (req, res) => {
     const { username, password } = req.body;
     if (!username || !password) return res.status(400).json({ error: 'Username and password required' });
 
-    const salt = await bcrypt.genSalt(10);
-    const passwordHash = await bcrypt.hash(password, salt);
+    const passwordHash = await bcrypt.hash(password, await bcrypt.genSalt(10));
 
-    const result = await pool.query(
-        'INSERT INTO users (username, passwordHash) VALUES ($1, $2) RETURNING id',
-        [username, passwordHash]
-    ).catch(dbErr => {
+    try {
+        const result = await pool.query(
+            'INSERT INTO users (username, passwordHash) VALUES ($1, $2) RETURNING id',
+            [username, passwordHash]
+        );
+        const newUserId = result.rows[0].id;
+        const token = jwt.sign({ id: newUserId, username }, JWT_SECRET, { expiresIn: '7d' });
+        res.status(201).json({ token, user: { id: newUserId, username } });
+    } catch (dbErr) {
         if (dbErr.code === '23505') return res.status(400).json({ error: 'Username already exists' });
-        return res.status(500).json({ error: 'Database error' });
-    });
-
-    if (!result || res.headersSent) return;
-    const newUserId = result.rows[0].id;
-    const token = jwt.sign({ id: newUserId, username }, JWT_SECRET, { expiresIn: '7d' });
-    res.status(201).json({ token, user: { id: newUserId, username } });
+        res.status(500).json({ error: 'Database error' });
+    }
 });
 
 app.post('/api/auth/login', async (req, res) => {

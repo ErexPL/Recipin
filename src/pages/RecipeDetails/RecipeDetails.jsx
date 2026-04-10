@@ -1,8 +1,8 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useRecipes } from '../../context/RecipeContext';
 import { useAuth } from '../../context/AuthContext';
-import { ArrowLeft, Clock, Heart, Bookmark, Flame, ListOrdered, ShoppingBag, Pencil, Trash2, X, Plus, Upload } from 'lucide-react';
+import { ArrowLeft, Clock, Heart, Bookmark, Flame, ListOrdered, ShoppingBag, Trash2, X, Plus } from 'lucide-react';
 import './RecipeDetails.css';
 
 const RecipeDetails = () => {
@@ -14,8 +14,6 @@ const RecipeDetails = () => {
     const [editForm, setEditForm] = useState(null);
     const [ingredients, setIngredients] = useState([]);
     const [steps, setSteps] = useState([]);
-    const [imagePreview, setImagePreview] = useState('');
-    const fileInputRef = useRef(null);
 
     if (isLoading) {
         return (
@@ -61,67 +59,34 @@ const RecipeDetails = () => {
         });
         setIngredients([...recipe.ingredients]);
         setSteps([...recipe.steps]);
-        setImagePreview(recipe.image);
         setIsEditing(true);
     };
 
     const cancelEditing = () => {
         setIsEditing(false);
         setEditForm(null);
-        setImagePreview('');
     };
 
     const handleEditChange = (e) => {
         const { name, value } = e.target;
         if (name === 'prepTime') {
-            const numericValue = value.replace(/[^0-9]/g, '');
-            setEditForm({ ...editForm, [name]: numericValue });
+            setEditForm({ ...editForm, [name]: value.replace(/[^0-9]/g, '') });
         } else {
             setEditForm({ ...editForm, [name]: value });
         }
     };
 
-    const handleImageUpload = (e) => {
-        const file = e.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                setEditForm(prev => ({ ...prev, image: reader.result }));
-                setImagePreview(reader.result);
-            };
-            reader.readAsDataURL(file);
-        }
-    };
-
-    const removeImage = () => {
-        setEditForm(prev => ({ ...prev, image: '' }));
-        setImagePreview('');
-        if (fileInputRef.current) {
-            fileInputRef.current.value = '';
-        }
-    };
-
-    const handleIngredientChange = (index, value) => {
-        const newIngredients = [...ingredients];
-        newIngredients[index] = value;
-        setIngredients(newIngredients);
-    };
-
-    const handleStepChange = (index, value) => {
-        const newSteps = [...steps];
-        newSteps[index] = value;
-        setSteps(newSteps);
+    const updateArray = (setter, list, index, value) => {
+        const newList = [...list];
+        newList[index] = value;
+        setter(newList);
     };
 
     const addIngredient = () => setIngredients([...ingredients, '']);
-    const removeIngredient = (index) => {
-        if (ingredients.length > 1) setIngredients(ingredients.filter((_, i) => i !== index));
-    };
+    const removeIngredient = (index) => ingredients.length > 1 && setIngredients(ingredients.filter((_, i) => i !== index));
 
     const addStep = () => setSteps([...steps, '']);
-    const removeStep = (index) => {
-        if (steps.length > 1) setSteps(steps.filter((_, i) => i !== index));
-    };
+    const removeStep = (index) => steps.length > 1 && setSteps(steps.filter((_, i) => i !== index));
 
     const handleSaveEdit = async () => {
         const cleanedIngredients = ingredients.filter(i => i.trim() !== '');
@@ -180,28 +145,8 @@ const RecipeDetails = () => {
                         </div>
 
                         <div className="input-group">
-                            <label className="input-label">Photo</label>
-                            {!imagePreview ? (
-                                <div className="upload-area" onClick={() => fileInputRef.current?.click()}>
-                                    <Upload size={32} className="upload-icon" />
-                                    <p>Click to upload a photo</p>
-                                    <span className="upload-hint">PNG, JPG, or WEBP</span>
-                                </div>
-                            ) : (
-                                <div className="image-preview mt-2">
-                                    <img src={imagePreview} alt="Preview" />
-                                    <button type="button" className="remove-image-btn" onClick={removeImage}>
-                                        <X size={20} />
-                                    </button>
-                                </div>
-                            )}
-                            <input
-                                ref={fileInputRef}
-                                type="file"
-                                accept="image/*"
-                                onChange={handleImageUpload}
-                                style={{ display: 'none' }}
-                            />
+                            <label className="input-label">Image URL</label>
+                            <input type="url" name="image" className="input-field" value={editForm.image} onChange={handleEditChange} />
                         </div>
 
                         <div className="grid-2-col">
@@ -237,18 +182,11 @@ const RecipeDetails = () => {
 
                     <div className="form-section">
                         <h2 className="section-title">Ingredients</h2>
-                        {ingredients.map((ing, index) => (
-                            <div key={index} className="array-input-row flex-center-start gap-2 mb-2">
-                                <span className="row-number">{index + 1}.</span>
-                                <input
-                                    type="text"
-                                    className="input-field flex-1"
-                                    value={ing}
-                                    onChange={(e) => handleIngredientChange(index, e.target.value)}
-                                />
-                                <button type="button" className="btn-icon danger-icon" onClick={() => removeIngredient(index)} disabled={ingredients.length === 1}>
-                                    <Trash2 size={18} />
-                                </button>
+                        {ingredients.map((ing, i) => (
+                            <div key={i} className="array-input-row flex-center-start gap-2 mb-2">
+                                <span className="row-number">{i + 1}.</span>
+                                <input type="text" className="input-field flex-1" value={ing} onChange={(e) => updateArray(setIngredients, ingredients, i, e.target.value)} />
+                                <button type="button" className="btn-icon danger-icon" onClick={() => removeIngredient(i)} disabled={ingredients.length === 1}><Trash2 size={18} /></button>
                             </div>
                         ))}
                         <button type="button" className="btn btn-outline mt-2" onClick={addIngredient}>
@@ -258,17 +196,11 @@ const RecipeDetails = () => {
 
                     <div className="form-section">
                         <h2 className="section-title">Instructions</h2>
-                        {steps.map((step, index) => (
-                            <div key={index} className="array-input-row flex-start gap-2 mb-2">
-                                <span className="row-number mt-3">{index + 1}.</span>
-                                <textarea
-                                    className="input-field flex-1 textarea-field"
-                                    value={step}
-                                    onChange={(e) => handleStepChange(index, e.target.value)}
-                                />
-                                <button type="button" className="btn-icon danger-icon mt-2" onClick={() => removeStep(index)} disabled={steps.length === 1}>
-                                    <Trash2 size={18} />
-                                </button>
+                        {steps.map((step, i) => (
+                            <div key={i} className="array-input-row flex-start gap-2 mb-2">
+                                <span className="row-number mt-3">{i + 1}.</span>
+                                <textarea className="input-field flex-1 textarea-field" value={step} onChange={(e) => updateArray(setSteps, steps, i, e.target.value)} />
+                                <button type="button" className="btn-icon danger-icon mt-2" onClick={() => removeStep(i)} disabled={steps.length === 1}><Trash2 size={18} /></button>
                             </div>
                         ))}
                         <button type="button" className="btn btn-outline mt-2" onClick={addStep}>
