@@ -15,6 +15,7 @@ export const RecipeProvider = ({ children }) => {
     const { token, isAuthenticated } = useAuth();
 
     const [recipes, setRecipes] = useState([]);
+    const [loading, setLoading] = useState({});
     const [searchQuery, setSearchQuery] = useState('');
     const [filter, setFilter] = useState('All');
     const [isLoading, setIsLoading] = useState(true);
@@ -35,7 +36,9 @@ export const RecipeProvider = ({ children }) => {
 
     const toggleSave = async (id) => {
         if (!isAuthenticated) return alert('Please login to save recipes');
+        if (loading[id]) return;
 
+        setLoading(prev => ({ ...prev, [id]: true }));
         const res = await fetch(`/api/recipes/${id}/save`, {
             method: 'POST',
             headers: { 'Authorization': `Bearer ${token}` }
@@ -46,10 +49,21 @@ export const RecipeProvider = ({ children }) => {
                 prev.map(r => r.id === id ? { ...r, isSaved: data.isSaved } : r)
             );
         }
+        setLoading(prev => ({ ...prev, [id]: false }));
     };
 
     const toggleUpvote = async (id) => {
         if (!isAuthenticated) return alert('Please login to upvote recipes');
+        if (loading[id]) return;
+
+        setLoading(prev => ({ ...prev, [id]: true }));
+        setRecipes(prev =>
+            prev.map(r => r.id === id ? {
+                ...r,
+                hasUpvoted: !r.hasUpvoted,
+                upvotes: r.hasUpvoted ? r.upvotes - 1 : r.upvotes + 1
+            } : r)
+        );
 
         const res = await fetch(`/api/recipes/${id}/upvote`, {
             method: 'POST',
@@ -58,13 +72,10 @@ export const RecipeProvider = ({ children }) => {
         const data = await res.json();
         if (res.ok) {
             setRecipes(prev =>
-                prev.map(r => r.id === id ? {
-                    ...r,
-                    hasUpvoted: data.hasUpvoted,
-                    upvotes: data.hasUpvoted ? r.upvotes + 1 : r.upvotes - 1
-                } : r)
+                prev.map(r => r.id === id ? { ...r, hasUpvoted: data.hasUpvoted, upvotes: data.upvotes } : r)
             );
         }
+        setLoading(prev => ({ ...prev, [id]: false }));
     };
 
     const addRecipe = async (newRecipe) => {

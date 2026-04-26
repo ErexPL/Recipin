@@ -129,12 +129,13 @@ app.post('/api/recipes/:id/upvote', authenticateToken, async (req, res) => {
     if (look.rows.length > 0) {
         await pool.query('DELETE FROM upvotes WHERE user_id = $1 AND recipe_id = $2', [userId, recipeId]);
         await pool.query('UPDATE recipes SET upvotes = upvotes - 1 WHERE id = $1', [recipeId]);
-        res.json({ message: 'Upvote removed', hasUpvoted: false });
     } else {
         await pool.query('INSERT INTO upvotes (user_id, recipe_id) VALUES ($1, $2)', [userId, recipeId]);
         await pool.query('UPDATE recipes SET upvotes = upvotes + 1 WHERE id = $1', [recipeId]);
-        res.json({ message: 'Upvoted', hasUpvoted: true });
     }
+
+    const result = await pool.query('SELECT upvotes FROM recipes WHERE id = $1', [recipeId]);
+    res.json({ hasUpvoted: look.rows.length === 0, upvotes: result.rows[0].upvotes });
 });
 
 app.put('/api/recipes/:id', authenticateToken, async (req, res) => {
