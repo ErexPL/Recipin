@@ -48,3 +48,19 @@ Make sure you have Node.js and npm installed on your machine.
 ### Project Figma
 
 https://www.figma.com/design/HFPDrCR5F2u20HUp2n51p8/Untitled?node-id=1-4
+
+---
+### Website
+
+https://recipin-pi.vercel.app/
+
+---
+### Github
+
+https://github.com/ErexPL/Recipin
+
+---
+### Developers
+
+- Dawid Zyś
+- Szymon Rzeszowski
